@@ -1,0 +1,30 @@
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
+namespace ProductFeedback.API.Entities
+{
+    public class SuggestionComment
+    {
+        [Key]
+        public int Id { get; set; }
+
+        [Required]
+        [MaxLength(200)]
+        public string Content { get; set; }
+
+        [ForeignKey("UserId")]
+        public User? User { get; set; }
+
+        public int UserId { get; set; }
+
+        [ForeignKey("SuggestionId")]
+        public Suggestion? Suggestion { get; set; }
+        public int SuggestionId { get; set; }
+
+        public ICollection<SuggestionCommentReply> Replies { get; set; } = new List<SuggestionCommentReply>();
+
+        public SuggestionComment(string content) {
+            Content = content;
+        }
+    }
+}
