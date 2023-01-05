@@ -1,6 +1,8 @@
 
-using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using ProductFeedback.API.DbContexts;
+using ProductFeedback.API.Services;
+using Serilog;
 
 namespace ProductFeedback.API
 {
@@ -8,7 +10,17 @@ namespace ProductFeedback.API
     {
         public static void Main(string[] args)
         {
+
+            Log.Logger = new LoggerConfiguration()
+            .MinimumLevel.Debug()
+            .WriteTo.Console()
+            .WriteTo.File("logs/suggestions.txt", rollingInterval: RollingInterval.Day)
+            .CreateLogger();
+
+
             var builder = WebApplication.CreateBuilder(args);
+
+            builder.Host.UseSerilog();
 
             // Add services to the container.
 
@@ -16,6 +28,13 @@ namespace ProductFeedback.API
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
+
+            builder.Services.AddDbContext<SuggestionContext>();
+
+            builder.Services.AddScoped<ISuggestionsRepository, SuggestionsRepository>();
+
+            builder.Services.AddControllers().AddNewtonsoftJson(options =>
+            options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore);
 
             var app = builder.Build();
 

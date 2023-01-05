@@ -19,6 +19,10 @@ namespace ProductFeedback.API.Entities
 
         public int UserId { get; set; }
 
+        [ForeignKey("SuggestionCommentId")]
+        public SuggestionComment? Comment { get; set; }
+        public int? SuggestionCommentId { get; set; }
+
         public SuggestionCommentReply(string content, string replyingTo) { 
             Content = content;
             ReplyingTo = replyingTo;

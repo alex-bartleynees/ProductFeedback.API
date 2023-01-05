@@ -47,12 +47,26 @@ namespace ProductFeedback.API.DbContexts
                     }
                     );
 
+            modelBuilder.Entity<SuggestionCommentReply>()
+                .HasData(
+                    new SuggestionCommentReply("Good idea!", "Suzanne Chang")
+                    {
+                        Id = 1,
+                        UserId = 2,
+                        SuggestionCommentId = 1
+                    }
+                    );
+
             modelBuilder.Entity<User>()
                 .HasData(
                     new User("Suzanne Chang", "./assets/user-images/image-suzanne.jpg")
                     {
                         Id = 1,
 
+                    },
+                    new User("Test User", ".")
+                    {
+                        Id = 2,
                     }
                     );
         }

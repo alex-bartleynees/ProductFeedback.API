@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ProductFeedback.API.DbContexts;
 
@@ -11,9 +12,11 @@ using ProductFeedback.API.DbContexts;
 namespace ProductFeedback.API.Migrations
 {
     [DbContext(typeof(SuggestionContext))]
-    partial class SuggestionContextModelSnapshot : ModelSnapshot
+    [Migration("20230105220209_SuggestionDBAddCommentReply2")]
+    partial class SuggestionDBAddCommentReply2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
