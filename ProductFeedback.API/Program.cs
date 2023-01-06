@@ -10,6 +10,7 @@ namespace ProductFeedback.API
     {
         public static void Main(string[] args)
         {
+            var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 
             Log.Logger = new LoggerConfiguration()
             .MinimumLevel.Debug()
@@ -36,6 +37,16 @@ namespace ProductFeedback.API
             builder.Services.AddControllers().AddNewtonsoftJson(options =>
             options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore);
 
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy(name: MyAllowSpecificOrigins,
+                                  policy =>
+                                  {
+                                      policy.WithOrigins("http://localhost:4200");
+                                  });
+            });
+
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
@@ -46,6 +57,8 @@ namespace ProductFeedback.API
             }
 
             app.UseHttpsRedirection();
+
+            app.UseCors(MyAllowSpecificOrigins);
 
             app.UseAuthorization();
 

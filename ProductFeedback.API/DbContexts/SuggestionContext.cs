@@ -59,12 +59,12 @@ namespace ProductFeedback.API.DbContexts
 
             modelBuilder.Entity<User>()
                 .HasData(
-                    new User("Suzanne Chang", "./assets/user-images/image-suzanne.jpg")
+                    new User("Suzanne Chang", "upbeat1811", "./assets/user-images/image-suzanne.jpg")
                     {
                         Id = 1,
 
                     },
-                    new User("Test User", ".")
+                    new User("Thomas Hood", "brawnybrave", "./assets/user-images/image-thomas.jpg")
                     {
                         Id = 2,
                     }
