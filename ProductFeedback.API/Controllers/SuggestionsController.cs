@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using ProductFeedback.API.Entities;
+using ProductFeedback.API.Models;
 using ProductFeedback.API.Services;
 
 namespace ProductFeedback.API.Controllers
@@ -28,6 +29,16 @@ namespace ProductFeedback.API.Controllers
             }
 
             return Ok(suggestionsEntity);
+        }
+
+        [HttpPost]
+        public async Task<ActionResult<Suggestion>> CreateSuggestion(SuggestionForCreationDto suggestion)
+        {
+            var suggestionEntity = new Suggestion(suggestion.Title, suggestion.Category, "" , suggestion.Description) { };
+
+            await _suggestionsRepository.CreateSuggestion(suggestionEntity);
+
+            return Ok(suggestionEntity);
         }
     }
 }

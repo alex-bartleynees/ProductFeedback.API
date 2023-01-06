@@ -24,5 +24,11 @@ namespace ProductFeedback.API.Services
                 .ToListAsync();
 
         }
+
+        public async Task CreateSuggestion(Suggestion suggestion)
+        {
+            await _context.AddAsync<Suggestion>(suggestion);
+            _context.SaveChanges();
+        }
     }
 }
