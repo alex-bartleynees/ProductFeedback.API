@@ -40,11 +40,34 @@ namespace ProductFeedback.API.Controllers
                 return BadRequest(ModelState);
             }
 
-            var suggestionEntity = new Suggestion(suggestion.Title, suggestion.Category, "" , suggestion.Description) { };
+            var suggestionEntity = new Suggestion(suggestion.Title, suggestion.Category, "" , suggestion.Description);
 
             await _suggestionsRepository.CreateSuggestion(suggestionEntity);
 
             return Ok(suggestionEntity);
+        }
+
+        [HttpPut("{suggestionId}")]
+        public ActionResult<Suggestion>  UpdateSuggestion(int suggestionId, SuggestionForUpdateDto suggestion)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var suggestionEntity = _suggestionsRepository.UpdateSuggestion(suggestionId, suggestion);
+
+            if (suggestionEntity == null) { return NotFound(); }
+
+            return Ok(suggestionEntity);
+        }
+
+        [HttpDelete("{suggestionId}")]
+        public ActionResult DeleteSuggestion(int suggestionId)
+        {
+            _suggestionsRepository.DeleteSuggestion(suggestionId);
+
+            return NoContent();
         }
     }
 }

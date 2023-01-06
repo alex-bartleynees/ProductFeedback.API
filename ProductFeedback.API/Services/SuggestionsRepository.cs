@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using ProductFeedback.API.DbContexts;
 using ProductFeedback.API.Entities;
+using ProductFeedback.API.Models;
 
 namespace ProductFeedback.API.Services
 {
@@ -28,7 +29,37 @@ namespace ProductFeedback.API.Services
         public async Task CreateSuggestion(Suggestion suggestion)
         {
             await _context.AddAsync<Suggestion>(suggestion);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
+        }
+
+        public Suggestion? UpdateSuggestion(int suggestionId, SuggestionForUpdateDto suggestion)
+        {
+            var entityToUpdate = _context.Suggestions.FirstOrDefault(s => s.Id == suggestionId);
+
+            if (entityToUpdate != null)
+            {
+                entityToUpdate.Title = suggestion.Title;
+                entityToUpdate.Upvotes = suggestion.Upvotes;
+                entityToUpdate.Category = suggestion.Category;
+                entityToUpdate.Status = suggestion.Status;
+                entityToUpdate.Description = suggestion.Description;
+
+                _context.SaveChanges();
+
+                return entityToUpdate;
+            }
+
+            return null;
+        }
+
+        public void DeleteSuggestion(int suggestionId)
+        {
+            var entityToDelete = _context.Suggestions.FirstOrDefault(s => s.Id == suggestionId);
+            if (entityToDelete != null)
+            {
+                _context.Suggestions.Remove(entityToDelete);
+                _context.SaveChanges();
+            }
         }
     }
 }
