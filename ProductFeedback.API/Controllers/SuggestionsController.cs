@@ -34,6 +34,12 @@ namespace ProductFeedback.API.Controllers
         [HttpPost]
         public async Task<ActionResult<Suggestion>> CreateSuggestion(SuggestionForCreationDto suggestion)
         {
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
             var suggestionEntity = new Suggestion(suggestion.Title, suggestion.Category, "" , suggestion.Description) { };
 
             await _suggestionsRepository.CreateSuggestion(suggestionEntity);

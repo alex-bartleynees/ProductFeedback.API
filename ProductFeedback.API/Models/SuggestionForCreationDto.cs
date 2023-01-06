@@ -1,8 +1,11 @@
-﻿namespace ProductFeedback.API.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace ProductFeedback.API.Models
 {
     public class SuggestionForCreationDto
     {
-
+        [Required(ErrorMessage = "You must provide a title.")]
+        [MaxLength(100)]
         public string Title { get; set; }
 
         public string Category { get; set; }
