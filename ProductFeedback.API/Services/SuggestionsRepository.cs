@@ -26,30 +26,22 @@ namespace ProductFeedback.API.Services
 
         }
 
+        public async Task<Suggestion> GetSuggestionById(int suggestionId)
+        {
+            return await _context.Suggestions
+                .Where(s => s.Id == suggestionId)
+                .Include(c => c.Comments)
+                .ThenInclude(c => c.User)
+                .Include(x => x.Comments)
+                .ThenInclude(r => r.Replies)
+                .ThenInclude(r => r.User)
+                .FirstOrDefaultAsync();
+        }
+
         public async Task CreateSuggestion(Suggestion suggestion)
         {
             await _context.AddAsync<Suggestion>(suggestion);
             await _context.SaveChangesAsync();
-        }
-
-        public Suggestion? UpdateSuggestion(int suggestionId, SuggestionForUpdateDto suggestion)
-        {
-            var entityToUpdate = _context.Suggestions.FirstOrDefault(s => s.Id == suggestionId);
-
-            if (entityToUpdate != null)
-            {
-                entityToUpdate.Title = suggestion.Title;
-                entityToUpdate.Upvotes = suggestion.Upvotes;
-                entityToUpdate.Category = suggestion.Category;
-                entityToUpdate.Status = suggestion.Status;
-                entityToUpdate.Description = suggestion.Description;
-
-                _context.SaveChanges();
-
-                return entityToUpdate;
-            }
-
-            return null;
         }
 
         public void DeleteSuggestion(int suggestionId)
@@ -58,8 +50,12 @@ namespace ProductFeedback.API.Services
             if (entityToDelete != null)
             {
                 _context.Suggestions.Remove(entityToDelete);
-                _context.SaveChanges();
             }
+        }
+
+        public async Task<bool> SaveChangesAsync()
+        {
+            return (await _context.SaveChangesAsync() >= 0);
         }
     }
 }

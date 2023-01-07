@@ -7,10 +7,12 @@ namespace ProductFeedback.API.Services
     {
         Task<IEnumerable<Suggestion>> GetSuggestions();
 
+        Task<Suggestion> GetSuggestionById(int suggestionId);
+
         Task CreateSuggestion(Suggestion suggestion);
 
-        Suggestion? UpdateSuggestion(int suggestionId, SuggestionForUpdateDto suggestion);
-
         void DeleteSuggestion(int suggestionId);
+
+        Task<bool> SaveChangesAsync();
     }
 }

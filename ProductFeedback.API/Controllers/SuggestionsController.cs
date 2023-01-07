@@ -31,6 +31,19 @@ namespace ProductFeedback.API.Controllers
             return Ok(suggestionsEntity);
         }
 
+        [HttpGet("{suggestionId}", Name = "GetPointOfInterest")]
+        public async Task<ActionResult<IEnumerable<Suggestion>>> GetSuggestionById(int suggestionId)
+        {
+            var suggestion = await _suggestionsRepository.GetSuggestionById(suggestionId);
+
+            if (suggestion == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(suggestion);
+        }
+
         [HttpPost]
         public async Task<ActionResult<Suggestion>> CreateSuggestion(SuggestionForCreationDto suggestion)
         {
@@ -48,24 +61,37 @@ namespace ProductFeedback.API.Controllers
         }
 
         [HttpPut("{suggestionId}")]
-        public ActionResult<Suggestion>  UpdateSuggestion(int suggestionId, SuggestionForUpdateDto suggestion)
+        public async Task<ActionResult<Suggestion>>  UpdateSuggestion(int suggestionId, SuggestionForUpdateDto suggestion)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            var suggestionEntity = _suggestionsRepository.UpdateSuggestion(suggestionId, suggestion);
+            var entityToUpdate = await _suggestionsRepository.GetSuggestionById(suggestionId);
 
-            if (suggestionEntity == null) { return NotFound(); }
+            if (entityToUpdate != null)
+            {
+                entityToUpdate.Title = suggestion.Title;
+                entityToUpdate.Upvotes = suggestion.Upvotes;
+                entityToUpdate.Category = suggestion.Category;
+                entityToUpdate.Status = suggestion.Status;
+                entityToUpdate.Description = suggestion.Description;
 
-            return Ok(suggestionEntity);
+                await _suggestionsRepository.SaveChangesAsync();
+
+                return Ok(entityToUpdate);
+            }
+
+            return NotFound();
         }
 
         [HttpDelete("{suggestionId}")]
-        public ActionResult DeleteSuggestion(int suggestionId)
+        public async  Task<ActionResult> DeleteSuggestion(int suggestionId)
         {
             _suggestionsRepository.DeleteSuggestion(suggestionId);
+
+            await _suggestionsRepository.SaveChangesAsync();
 
             return NoContent();
         }
