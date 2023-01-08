@@ -2,10 +2,12 @@
 
 #nullable disable
 
+#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
+
 namespace ProductFeedback.API.Migrations
 {
     /// <inheritdoc />
-    public partial class SuggestionDBInitialMigration : Migration
+    public partial class SuggestionsDBAdd : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -16,7 +18,7 @@ namespace ProductFeedback.API.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Title = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    Title = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     Upvotes = table.Column<int>(type: "int", nullable: false),
                     Category = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     Status = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
@@ -33,7 +35,8 @@ namespace ProductFeedback.API.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    UserName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Username = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Image = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
@@ -47,7 +50,7 @@ namespace ProductFeedback.API.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Content = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
+                    Content = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: false),
                     UserId = table.Column<int>(type: "int", nullable: false),
                     SuggestionId = table.Column<int>(type: "int", nullable: false)
                 },
@@ -74,7 +77,7 @@ namespace ProductFeedback.API.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Content = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
+                    Content = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: false),
                     ReplyingTo = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     UserId = table.Column<int>(type: "int", nullable: false),
                     SuggestionCommentId = table.Column<int>(type: "int", nullable: true)
@@ -98,17 +101,45 @@ namespace ProductFeedback.API.Migrations
             migrationBuilder.InsertData(
                 table: "Suggestions",
                 columns: new[] { "Id", "Category", "Description", "Status", "Title", "Upvotes" },
-                values: new object[] { 1, "enhancement", "Easier to search for solutions based on a specific stack.", "live", "Add tags for solutions okay", 144 });
+                values: new object[,]
+                {
+                    { 1, "enhancement", "Easier to search for solutions based on a specific stack.", "live", "Add tags for solutions okay", 144 },
+                    { 2, "feature", "It would help people with light sensitivities and who prefer dark mode.", "planned", "Add a dark theme option", 122 }
+                });
 
             migrationBuilder.InsertData(
                 table: "Users",
-                columns: new[] { "Id", "Image", "UserName" },
-                values: new object[] { 1, "./assets/user-images/image-suzanne.jpg", "Suzanne Chang" });
+                columns: new[] { "Id", "Image", "Name", "Username" },
+                values: new object[,]
+                {
+                    { 1, "./assets/user-images/image-suzanne.jpg", "Suzanne Chang", "upbeat1811" },
+                    { 2, "./assets/user-images/image-thomas.jpg", "Thomas Hood", "brawnybrave" },
+                    { 3, "./assets/user-images/image-zena.jpg", "Zena Kelley", "velvetround" },
+                    { 4, "./assets/user-images/image-elijah.jpg", "Elijah Moss", "hexagon.bestagon" },
+                    { 5, "./assets/user-images/image-james.jpg", "James Skinner", "hummingbird1" },
+                    { 6, "./assets/user-images/image-anne.jpg", "Anne Valentine", "annev1990" },
+                    { 7, "./assets/user-images/image-ryan.jpg", "Ryan Welles", "voyager.344" }
+                });
 
             migrationBuilder.InsertData(
                 table: "SuggestionsComment",
                 columns: new[] { "Id", "Content", "SuggestionId", "UserId" },
-                values: new object[] { 1, "Awesome idea! Trying to find framework-specific projects within the hubs can be tedious", 1, 1 });
+                values: new object[,]
+                {
+                    { 1, "Awesome idea! Trying to find framework-specific projects within the hubs can be tedious", 1, 1 },
+                    { 2, "Please use fun, color-coded labels to easily identify them at a glance", 1, 2 },
+                    { 3, "Also, please allow styles to be applied based on system preferences. I would love to be able to browse Frontend Mentor in the evening after my device’s dark mode turns on without the bright background it currently has.", 2, 4 },
+                    { 4, "Second this! I do a lot of late night coding and reading. Adding a dark theme can be great for preventing eye strain and the headaches that result. It’s also quite a trend with modern apps and  apparently saves battery life.", 2, 5 }
+                });
+
+            migrationBuilder.InsertData(
+                table: "SuggestionsCommentReply",
+                columns: new[] { "Id", "Content", "ReplyingTo", "SuggestionCommentId", "UserId" },
+                values: new object[,]
+                {
+                    { 1, "While waiting for dark mode, there are browser extensions that will also do the job. Search for 'dark theme' followed by your browser. There might be a need to turn off the extension for sites with naturally black backgrounds though.", "hummingbird1", 4, 6 },
+                    { 2, "Good point! Using any kind of style extension is great and can be highly customizable, like the ability to change contrast and brightness. I'd prefer not to use one of such extensions, however, for security and privacy reasons.", "annev1990", 4, 7 }
+                });
 
             migrationBuilder.CreateIndex(
                 name: "IX_SuggestionsComment_SuggestionId",

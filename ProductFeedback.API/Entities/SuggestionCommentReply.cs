@@ -9,7 +9,7 @@ namespace ProductFeedback.API.Entities
         public int Id { get; set; }
 
         [Required]
-        [MaxLength(200)]
+        [MaxLength(500)]
         public string Content { get; set; }
 
         public string ReplyingTo { get; set; }
@@ -23,7 +23,8 @@ namespace ProductFeedback.API.Entities
         public SuggestionComment? Comment { get; set; }
         public int? SuggestionCommentId { get; set; }
 
-        public SuggestionCommentReply(string content, string replyingTo) { 
+        public SuggestionCommentReply(string content, string replyingTo)
+        {
             Content = content;
             ReplyingTo = replyingTo;
         }

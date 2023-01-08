@@ -12,8 +12,8 @@ using ProductFeedback.API.DbContexts;
 namespace ProductFeedback.API.Migrations
 {
     [DbContext(typeof(SuggestionContext))]
-    [Migration("20230105215608_SuggestionDBAddCommentReply")]
-    partial class SuggestionDBAddCommentReply
+    [Migration("20230108004852_SuggestionsDBAdd")]
+    partial class SuggestionsDBAdd
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -50,8 +50,8 @@ namespace ProductFeedback.API.Migrations
 
                     b.Property<string>("Title")
                         .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<int>("Upvotes")
                         .HasColumnType("int");
@@ -69,6 +69,15 @@ namespace ProductFeedback.API.Migrations
                             Status = "live",
                             Title = "Add tags for solutions okay",
                             Upvotes = 144
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Category = "feature",
+                            Description = "It would help people with light sensitivities and who prefer dark mode.",
+                            Status = "planned",
+                            Title = "Add a dark theme option",
+                            Upvotes = 122
                         });
                 });
 
@@ -82,8 +91,8 @@ namespace ProductFeedback.API.Migrations
 
                     b.Property<string>("Content")
                         .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
 
                     b.Property<int>("SuggestionId")
                         .HasColumnType("int");
@@ -106,6 +115,27 @@ namespace ProductFeedback.API.Migrations
                             Content = "Awesome idea! Trying to find framework-specific projects within the hubs can be tedious",
                             SuggestionId = 1,
                             UserId = 1
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Content = "Please use fun, color-coded labels to easily identify them at a glance",
+                            SuggestionId = 1,
+                            UserId = 2
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Content = "Also, please allow styles to be applied based on system preferences. I would love to be able to browse Frontend Mentor in the evening after my device’s dark mode turns on without the bright background it currently has.",
+                            SuggestionId = 2,
+                            UserId = 4
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Content = "Second this! I do a lot of late night coding and reading. Adding a dark theme can be great for preventing eye strain and the headaches that result. It’s also quite a trend with modern apps and  apparently saves battery life.",
+                            SuggestionId = 2,
+                            UserId = 5
                         });
                 });
 
@@ -119,8 +149,8 @@ namespace ProductFeedback.API.Migrations
 
                     b.Property<string>("Content")
                         .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
 
                     b.Property<string>("ReplyingTo")
                         .IsRequired()
@@ -144,9 +174,18 @@ namespace ProductFeedback.API.Migrations
                         new
                         {
                             Id = 1,
-                            Content = "Good idea!",
-                            ReplyingTo = "Suzanne Chang",
-                            UserId = 2
+                            Content = "While waiting for dark mode, there are browser extensions that will also do the job. Search for 'dark theme' followed by your browser. There might be a need to turn off the extension for sites with naturally black backgrounds though.",
+                            ReplyingTo = "hummingbird1",
+                            SuggestionCommentId = 4,
+                            UserId = 6
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Content = "Good point! Using any kind of style extension is great and can be highly customizable, like the ability to change contrast and brightness. I'd prefer not to use one of such extensions, however, for security and privacy reasons.",
+                            ReplyingTo = "annev1990",
+                            SuggestionCommentId = 4,
+                            UserId = 7
                         });
                 });
 
@@ -162,7 +201,11 @@ namespace ProductFeedback.API.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("UserName")
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Username")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -175,13 +218,50 @@ namespace ProductFeedback.API.Migrations
                         {
                             Id = 1,
                             Image = "./assets/user-images/image-suzanne.jpg",
-                            UserName = "Suzanne Chang"
+                            Name = "Suzanne Chang",
+                            Username = "upbeat1811"
                         },
                         new
                         {
                             Id = 2,
-                            Image = ".",
-                            UserName = "Test User"
+                            Image = "./assets/user-images/image-thomas.jpg",
+                            Name = "Thomas Hood",
+                            Username = "brawnybrave"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Image = "./assets/user-images/image-zena.jpg",
+                            Name = "Zena Kelley",
+                            Username = "velvetround"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Image = "./assets/user-images/image-elijah.jpg",
+                            Name = "Elijah Moss",
+                            Username = "hexagon.bestagon"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Image = "./assets/user-images/image-james.jpg",
+                            Name = "James Skinner",
+                            Username = "hummingbird1"
+                        },
+                        new
+                        {
+                            Id = 6,
+                            Image = "./assets/user-images/image-anne.jpg",
+                            Name = "Anne Valentine",
+                            Username = "annev1990"
+                        },
+                        new
+                        {
+                            Id = 7,
+                            Image = "./assets/user-images/image-ryan.jpg",
+                            Name = "Ryan Welles",
+                            Username = "voyager.344"
                         });
                 });
 
@@ -206,7 +286,7 @@ namespace ProductFeedback.API.Migrations
 
             modelBuilder.Entity("ProductFeedback.API.Entities.SuggestionCommentReply", b =>
                 {
-                    b.HasOne("ProductFeedback.API.Entities.SuggestionComment", null)
+                    b.HasOne("ProductFeedback.API.Entities.SuggestionComment", "Comment")
                         .WithMany("Replies")
                         .HasForeignKey("SuggestionCommentId");
 
@@ -215,6 +295,8 @@ namespace ProductFeedback.API.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Comment");
 
                     b.Navigation("User");
                 });

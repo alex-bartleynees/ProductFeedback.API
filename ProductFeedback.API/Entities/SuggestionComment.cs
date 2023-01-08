@@ -9,7 +9,7 @@ namespace ProductFeedback.API.Entities
         public int Id { get; set; }
 
         [Required]
-        [MaxLength(200)]
+        [MaxLength(500)]
         public string Content { get; set; }
 
         [ForeignKey("UserId")]
@@ -23,7 +23,8 @@ namespace ProductFeedback.API.Entities
 
         public ICollection<SuggestionCommentReply> Replies { get; set; } = new List<SuggestionCommentReply>();
 
-        public SuggestionComment(string content) {
+        public SuggestionComment(string content)
+        {
             Content = content;
         }
     }
