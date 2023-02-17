@@ -27,6 +27,7 @@ namespace ProductFeedback.API.Entities
 
         public ICollection<SuggestionComment> Comments { get; set; } = new List<SuggestionComment>();
 
+        public Suggestion() { }
         public Suggestion (string title, string category, string status, string description)
         {
             Title = title;

@@ -10,7 +10,7 @@ namespace ProductFeedback.API
     {
         public static void Main(string[] args)
         {
-            var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
+            var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";  
 
             Log.Logger = new LoggerConfiguration()
             .MinimumLevel.Debug()

@@ -9,7 +9,11 @@ namespace ProductFeedback.API.Services
 
         Task<Suggestion> GetSuggestionById(int suggestionId);
 
-        Task CreateSuggestion(Suggestion suggestion);
+        Task<IEnumerable<int>> CreateSuggestion(Suggestion suggestion);
+
+        Task<IEnumerable<int>> AddCommentToSuggestion(SuggestionComment comment);
+
+        Task<IEnumerable<int>> AddReplyToComment(SuggestionCommentReply reply);
 
         void DeleteSuggestion(int suggestionId);
 

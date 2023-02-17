@@ -55,7 +55,9 @@ namespace ProductFeedback.API.Controllers
 
             var suggestionEntity = new Suggestion(suggestion.Title, suggestion.Category, "" , suggestion.Description);
 
-            await _suggestionsRepository.CreateSuggestion(suggestionEntity);
+            var result = await _suggestionsRepository.CreateSuggestion(suggestionEntity);
+            var id = result.FirstOrDefault();
+            suggestionEntity.Id = (int)id;
 
             return Ok(suggestionEntity);
         }
@@ -90,8 +92,6 @@ namespace ProductFeedback.API.Controllers
         public async  Task<ActionResult> DeleteSuggestion(int suggestionId)
         {
             _suggestionsRepository.DeleteSuggestion(suggestionId);
-
-            await _suggestionsRepository.SaveChangesAsync();
 
             return NoContent();
         }

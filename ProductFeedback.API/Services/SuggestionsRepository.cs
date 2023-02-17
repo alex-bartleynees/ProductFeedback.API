@@ -2,6 +2,7 @@
 using ProductFeedback.API.DbContexts;
 using ProductFeedback.API.Entities;
 using ProductFeedback.API.Models;
+using System.Collections.Generic;
 
 namespace ProductFeedback.API.Services
 {
@@ -38,19 +39,39 @@ namespace ProductFeedback.API.Services
                 .FirstOrDefaultAsync();
         }
 
-        public async Task CreateSuggestion(Suggestion suggestion)
+        public async Task<IEnumerable<int>> CreateSuggestion(Suggestion suggestion)
         {
-            await _context.AddAsync<Suggestion>(suggestion);
+            await _context.AddAsync(suggestion);
             await _context.SaveChangesAsync();
+
+            return new List<int>() { suggestion.Id };
         }
 
-        public void DeleteSuggestion(int suggestionId)
+        public async Task<IEnumerable<int>> AddCommentToSuggestion(SuggestionComment comment)
+        {
+            await _context.AddAsync(comment);
+            await _context.SaveChangesAsync();
+
+            return new List<int>() {comment.Id};
+        }
+
+        public async Task<IEnumerable<int>> AddReplyToComment(SuggestionCommentReply reply)
+        {
+            await _context.AddAsync(reply);
+            await _context.SaveChangesAsync();
+
+            return new List<int>() { reply.Id };
+        }
+
+        public async void DeleteSuggestion(int suggestionId)
         {
             var entityToDelete = _context.Suggestions.FirstOrDefault(s => s.Id == suggestionId);
             if (entityToDelete != null)
             {
                 _context.Suggestions.Remove(entityToDelete);
             }
+           
+            await SaveChangesAsync();
         }
 
         public async Task<bool> SaveChangesAsync()
