@@ -90,5 +90,10 @@ namespace ProductFeedback.API.Services
         {
             throw new NotImplementedException();
         }
+
+        public Task<User> GetUser(int userId)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

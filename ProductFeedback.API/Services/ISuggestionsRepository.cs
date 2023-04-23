@@ -15,6 +15,8 @@ namespace ProductFeedback.API.Services
 
         Task<IEnumerable<int>> AddReplyToComment(SuggestionCommentReply reply);
 
+        Task<User> GetUser(int userId);
+
         void DeleteSuggestion(int suggestionId);
 
         Task<bool> SaveChangesAsync();

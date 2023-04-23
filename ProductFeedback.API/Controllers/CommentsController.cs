@@ -38,12 +38,14 @@ namespace ProductFeedback.API.Controllers
             var id = result.FirstOrDefault();
             commentEntity.Id = (int)id;
 
+            var user = await _suggestionsRepository.GetUser(comment.UserId);
+
             var commentToReturn = new CommentToReturnDto()
             {
                 Id = commentEntity.Id,
                 SuggestionId = commentEntity.SuggestionId,
                 Content = commentEntity.Content,
-                User = new User("James Skinner", "hummingbird1", "./assets/user-images/image-james.jpg")
+                User = user,
             };
 
             return Ok(commentToReturn);
@@ -68,6 +70,8 @@ namespace ProductFeedback.API.Controllers
             var id = result.FirstOrDefault();
             replyEntity.Id = (int)id;
 
+            var user = await _suggestionsRepository.GetUser(reply.UserId);
+
             var replyToReturn = new ReplyToReturnDto()
             {
                 Id = replyEntity.Id,
@@ -75,7 +79,7 @@ namespace ProductFeedback.API.Controllers
                 SuggestionCommentId = (int)replyEntity.SuggestionCommentId,
                 Content = replyEntity.Content,
                 ReplyingTo = reply.ReplyingTo,
-                User = new User("James Skinner", "hummingbird1", "./assets/user-images/image-james.jpg")
+                User = user,
             };
 
             return Ok(replyToReturn);

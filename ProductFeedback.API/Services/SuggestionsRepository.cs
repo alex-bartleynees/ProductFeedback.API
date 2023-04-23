@@ -78,5 +78,11 @@ namespace ProductFeedback.API.Services
         {
             return (await _context.SaveChangesAsync() >= 0);
         }
+
+        public async Task<User> GetUser(int userId)
+        {
+            return await _context.Users
+                .Where(u => u.Id == userId).FirstOrDefaultAsync();
+        }
     }
 }
